@@ -589,7 +589,7 @@ class Logger implements LoggerInterface, ResettableInterface
      */
     public function debug(string|\Stringable $message, array $context = []): void
     {
-        $this->addRecord(Level::Debug, (string) $message, $context);
+        $this->addRecord(7, (string) $message, $context);
     }
 
     /**
@@ -602,7 +602,7 @@ class Logger implements LoggerInterface, ResettableInterface
      */
     public function info(string|\Stringable $message, array $context = []): void
     {
-        $this->addRecord(Level::Info, (string) $message, $context);
+        $this->addRecord(6, (string) $message, $context);
     }
 
     /**
@@ -615,7 +615,7 @@ class Logger implements LoggerInterface, ResettableInterface
      */
     public function notice(string|\Stringable $message, array $context = []): void
     {
-        $this->addRecord(Level::Notice, (string) $message, $context);
+        $this->addRecord(5, (string) $message, $context);
     }
 
     /**
@@ -628,7 +628,7 @@ class Logger implements LoggerInterface, ResettableInterface
      */
     public function warning(string|\Stringable $message, array $context = []): void
     {
-        $this->addRecord(Level::Warning, (string) $message, $context);
+        $this->addRecord(4, (string) $message, $context);
     }
 
     /**
@@ -641,7 +641,7 @@ class Logger implements LoggerInterface, ResettableInterface
      */
     public function error(string|\Stringable $message, array $context = []): void
     {
-        $this->addRecord(Level::Error, (string) $message, $context);
+        $this->addRecord(3, (string) $message, $context);
     }
 
     /**
@@ -654,7 +654,7 @@ class Logger implements LoggerInterface, ResettableInterface
      */
     public function critical(string|\Stringable $message, array $context = []): void
     {
-        $this->addRecord(Level::Critical, (string) $message, $context);
+        $this->addRecord(2, (string) $message, $context);
     }
 
     /**
@@ -667,7 +667,7 @@ class Logger implements LoggerInterface, ResettableInterface
      */
     public function alert(string|\Stringable $message, array $context = []): void
     {
-        $this->addRecord(Level::Alert, (string) $message, $context);
+        $this->addRecord(1, (string) $message, $context);
     }
 
     /**
@@ -680,7 +680,7 @@ class Logger implements LoggerInterface, ResettableInterface
      */
     public function emergency(string|\Stringable $message, array $context = []): void
     {
-        $this->addRecord(Level::Emergency, (string) $message, $context);
+        $this->addRecord(0, (string) $message, $context);
     }
 
     /**
