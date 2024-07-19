@@ -12,6 +12,8 @@
 namespace Monolog;
 
 use Monolog\Handler\TestHandler;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use Psr\Log\LogLevel;
 
 class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
@@ -23,6 +25,7 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(ErrorHandler::class, ErrorHandler::register($logger, false, false, false));
     }
 
+    #[WithoutErrorHandler]
     public function testHandleError()
     {
         $logger = new Logger('test', [$handler = new TestHandler]);
@@ -34,7 +37,7 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         try {
             $errHandler->registerErrorHandler([], true);
             $prop = $this->getPrivatePropertyValue($errHandler, 'previousErrorHandler');
-            $this->assertTrue(is_callable($prop));
+            $this->assertTrue(\is_callable($prop));
             $this->assertSame($prevHandler, $prop);
 
             $resHandler = $errHandler->registerErrorHandler([E_USER_NOTICE => LogLevel::EMERGENCY], false);
@@ -44,7 +47,9 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
             $this->assertTrue($handler->hasErrorRecords());
             trigger_error('Foo', E_USER_NOTICE);
             $this->assertCount(2, $handler->getRecords());
+            // check that the remapping of notice to emergency above worked
             $this->assertTrue($handler->hasEmergencyRecords());
+            $this->assertFalse($handler->hasNoticeRecords());
         } finally {
             // restore previous handler
             set_error_handler($phpunitHandler);
@@ -61,16 +66,15 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
 
     protected function getPrivatePropertyValue($instance, $property)
     {
-        $ref = new \ReflectionClass(get_class($instance));
+        $ref = new \ReflectionClass(\get_class($instance));
         $prop = $ref->getProperty($property);
         $prop->setAccessible(true);
 
         return $prop->getValue($instance);
     }
 
-    /**
-     * @dataProvider fatalHandlerProvider
-     */
+    #[DataProvider('fatalHandlerProvider')]
+    #[WithoutErrorHandler]
     public function testFatalHandler(
         $level,
         $reservedMemorySize,
@@ -101,7 +105,7 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
 
         $errHandler->registerExceptionHandler([], true);
         $prop = $this->getPrivatePropertyValue($errHandler, 'previousExceptionHandler');
-        $this->assertTrue(is_callable($prop));
+        $this->assertTrue(\is_callable($prop));
     }
 
     public function testCodeToString()

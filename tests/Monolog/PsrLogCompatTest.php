@@ -15,6 +15,7 @@ use DateTimeZone;
 use Monolog\Handler\TestHandler;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Processor\PsrLogMessageProcessor;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\InvalidArgumentException;
@@ -63,9 +64,7 @@ class PsrLogCompatTest extends TestCase
         $this->assertInstanceOf(LoggerInterface::class, $this->getLogger());
     }
 
-    /**
-     * @dataProvider provideLevelsAndMessages
-     */
+    #[DataProvider('provideLevelsAndMessages')]
     public function testLogsAtAllLevels($level, $message)
     {
         $logger = $this->getLogger();
@@ -162,7 +161,7 @@ class PsrLogCompatTest extends TestCase
     /**
      * Creates a mock of a `Stringable`.
      *
-     * @param  string $string The string that must be represented by the stringable.
+     * @param string $string The string that must be represented by the stringable.
      */
     protected function createStringable(string $string = ''): MockObject&Stringable
     {
@@ -170,7 +169,7 @@ class PsrLogCompatTest extends TestCase
             ->getMock();
 
         $mock->method('__toString')
-            ->will($this->returnValue($string));
+            ->willReturn($string);
 
         return $mock;
     }

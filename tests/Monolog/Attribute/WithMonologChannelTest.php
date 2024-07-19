@@ -9,18 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace Monolog\Attribute;
 
-use Exception;
-use Monolog\LogRecord;
+use PHPUnit\Framework\TestCase;
 
-class ExceptionTestHandler extends TestHandler
+class WithMonologChannelTest extends TestCase
 {
-    /**
-     * @inheritDoc
-     */
-    protected function write(LogRecord $record): void
+    public function test(): void
     {
-        throw new Exception("ExceptionTestHandler::handle");
+        $attribute = new WithMonologChannel('fixture');
+        $this->assertSame('fixture', $attribute->channel);
     }
 }

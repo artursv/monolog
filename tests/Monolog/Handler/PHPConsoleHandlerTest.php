@@ -20,6 +20,7 @@ use PhpConsole\Connector;
 use PhpConsole\Dispatcher\Debug as DebugDispatcher;
 use PhpConsole\Dispatcher\Errors as ErrorDispatcher;
 use PhpConsole\Handler as VendorPhpConsoleHandler;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -99,7 +100,7 @@ class PHPConsoleHandlerTest extends TestCase
 
         $connector->expects($this->any())
             ->method('isActiveClient')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         return $connector;
     }
@@ -142,7 +143,7 @@ class PHPConsoleHandlerTest extends TestCase
         $message = 'test';
         $tag = 'tag';
         $context = [$tag, 'custom' => mt_rand()];
-        $expectedMessage = $message . ' ' . json_encode(array_slice($context, 1));
+        $expectedMessage = $message . ' ' . json_encode(\array_slice($context, 1));
         $this->debugDispatcher->expects($this->once())->method('dispatchDebug')->with(
             $this->equalTo($expectedMessage),
             $this->equalTo($tag)
@@ -196,7 +197,7 @@ class PHPConsoleHandlerTest extends TestCase
         $handler = $this->initLogger();
         $handler->log(
             \Psr\Log\LogLevel::ERROR,
-            sprintf('Uncaught Exception %s: "%s" at %s line %s', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine()),
+            sprintf('Uncaught Exception %s: "%s" at %s line %s', \get_class($e), $e->getMessage(), $e->getFile(), $e->getLine()),
             ['exception' => $e]
         );
     }
@@ -246,9 +247,7 @@ class PHPConsoleHandlerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideConnectorMethodsOptionsSets
-     */
+    #[DataProvider('provideConnectorMethodsOptionsSets')]
     public function testOptionCallsConnectorMethod($option, $method, $value, $isArgument = true)
     {
         $expectCall = $this->connector->expects($this->once())->method($method);
@@ -275,9 +274,7 @@ class PHPConsoleHandlerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideDumperOptionsValues
-     */
+    #[DataProvider('provideDumperOptionsValues')]
     public function testDumperOptions($option, $dumperProperty, $value)
     {
         new PHPConsoleHandler([$option => $value], $this->connector);

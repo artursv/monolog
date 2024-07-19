@@ -59,7 +59,7 @@ class InsightOpsHandlerTest extends TestCase
 
     private function createHandler()
     {
-        $useSSL = extension_loaded('openssl');
+        $useSSL = \extension_loaded('openssl');
         $args = ['testToken', 'us', $useSSL, Level::Debug, true];
         $this->resource = fopen('php://memory', 'a');
         $this->handler = $this->getMockBuilder(InsightOpsHandler::class)
@@ -73,12 +73,11 @@ class InsightOpsHandlerTest extends TestCase
 
         $this->handler->expects($this->any())
             ->method('fsockopen')
-            ->will($this->returnValue($this->resource));
+            ->willReturn($this->resource);
         $this->handler->expects($this->any())
             ->method('streamSetTimeout')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->handler->expects($this->any())
-            ->method('closeSocket')
-            ->will($this->returnValue(true));
+            ->method('closeSocket');
     }
 }

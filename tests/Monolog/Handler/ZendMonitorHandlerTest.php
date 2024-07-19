@@ -17,7 +17,7 @@ class ZendMonitorHandlerTest extends TestCase
 {
     public function setUp(): void
     {
-        if (!function_exists('zend_monitor_custom_event')) {
+        if (!\function_exists('zend_monitor_custom_event')) {
             $this->markTestSkipped('ZendServer is not installed');
         }
     }
@@ -49,11 +49,11 @@ class ZendMonitorHandlerTest extends TestCase
 
         $formatterMock->expects($this->once())
             ->method('format')
-            ->will($this->returnValue($formatterResult));
+            ->willReturn($formatterResult);
 
         $zendMonitor->expects($this->once())
             ->method('getDefaultFormatter')
-            ->will($this->returnValue($formatterMock));
+            ->willReturn($formatterMock);
 
         $zendMonitor->expects($this->once())
             ->method('writeZendMonitorCustomEvent')

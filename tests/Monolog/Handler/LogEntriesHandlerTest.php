@@ -63,7 +63,7 @@ class LogEntriesHandlerTest extends TestCase
 
     private function createHandler()
     {
-        $useSSL = extension_loaded('openssl');
+        $useSSL = \extension_loaded('openssl');
         $args = ['testToken', $useSSL, Level::Debug, true];
         $this->res = fopen('php://memory', 'a');
         $this->handler = $this->getMockBuilder('Monolog\Handler\LogEntriesHandler')
@@ -77,12 +77,11 @@ class LogEntriesHandlerTest extends TestCase
 
         $this->handler->expects($this->any())
             ->method('fsockopen')
-            ->will($this->returnValue($this->res));
+            ->willReturn($this->res);
         $this->handler->expects($this->any())
             ->method('streamSetTimeout')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->handler->expects($this->any())
-            ->method('closeSocket')
-            ->will($this->returnValue(true));
+            ->method('closeSocket');
     }
 }
